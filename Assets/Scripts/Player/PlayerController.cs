@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour
 
     #region Fields
 
-    private CookerInputActions cookerInputActions;
+    //private CookerInputActions cookerInputActions;
+    private InputActionAsset inputAsset;
+    private InputActionMap player;
     private InputAction movement;
 
     private Rigidbody rigidBody;
@@ -33,41 +35,73 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         this.rigidBody = this.GetComponent<Rigidbody>();
-        this.cookerInputActions = new CookerInputActions();        
+        //this.cookerActionMap = new CookerInputActions();        
+        this.inputAsset = this.GetComponent<PlayerInput>().actions;
+        this.player = this.inputAsset.FindActionMap("Cooking");
+        if (this.player == null)
+            throw new Exception("Action map Cooking not foun in Input Action Asset");
+        //this.SelectColor();
     }
 
     private void OnEnable()
     {
-        this.movement = this.cookerInputActions.Cooking.Move;
+        //this.movement = this.cookerActionMap.Cooking.Move;
+        //this.movement.Enable();
+
+        //this.cookerActionMap.Cooking.Run.performed += OnRunPerformed;
+        //this.cookerActionMap.Cooking.Run.Enable();
+
+        //this.cookerActionMap.Cooking.Action.performed += OnActionPerformed;
+        //this.cookerActionMap.Cooking.Action.Enable();
+
+        //this.cookerActionMap.Cooking.Grab.performed += OnGrabPerformed;
+        //this.cookerActionMap.Cooking.Grab.Enable();
+
+        //this.cookerActionMap.Cooking.Join.performed += OnJoinPerformed;
+        //this.cookerActionMap.Cooking.Join.Enable();
+
+        //this.cookerActionMap.Cooking.Enable();
+
+        this.movement = this.player.FindAction("Move");
         this.movement.Enable();
 
-        this.cookerInputActions.Cooking.Run.performed += OnRunPerformed;
-        this.cookerInputActions.Cooking.Run.Enable();
+        this.player.FindAction("Run").performed += OnRunPerformed;
+        this.player.FindAction("Run").Enable();
 
-        this.cookerInputActions.Cooking.Action.performed += OnActionPerformed;
-        this.cookerInputActions.Cooking.Action.Enable();
+        this.player.FindAction("Action").performed += OnActionPerformed;
+        this.player.FindAction("Action").Enable();
 
-        this.cookerInputActions.Cooking.Grab.performed += OnGrabPerformed;
-        this.cookerInputActions.Cooking.Grab.Enable();
+        this.player.FindAction("Grab").performed += OnGrabPerformed;
+        this.player.FindAction("Grab").Enable();
 
-        this.cookerInputActions.Cooking.Enable();
-    }   
+        this.player.FindAction("Join").performed += OnJoinPerformed;
+        this.player.FindAction("Join").Enable();
+
+        this.player.Enable();
+    }
+
+    
 
     private void OnDisable()
     {
         this.movement.Disable();
-        this.cookerInputActions.Cooking.Run.Disable();
-        this.cookerInputActions.Cooking.Action.Disable();
-        this.cookerInputActions.Cooking.Grab.Disable();
-        this.cookerInputActions.Cooking.Disable();
-        this.cookerInputActions.Cooking.Run.performed -= OnRunPerformed;
-        this.cookerInputActions.Cooking.Action.performed -= OnActionPerformed;
-        this.cookerInputActions.Cooking.Grab.performed -= OnGrabPerformed;
+        this.player.FindAction("Run").Disable();
+        this.player.FindAction("Action").Disable();
+        this.player.FindAction("Grab").Disable();
+        this.player.FindAction("Join").Disable();        
+        this.player.FindAction("Run").performed -= OnRunPerformed;
+        this.player.FindAction("Action").performed -= OnActionPerformed;
+        this.player.FindAction("Grab").performed -= OnGrabPerformed;
+        this.player.FindAction("Join").performed -= OnJoinPerformed;
+        this.player.Disable();
     }
 
     private void FixedUpdate()
     {
-        Debug.Log("Movemement Values " + movement.ReadValue<Vector2>());
+        Vector2 currentMovement = movement.ReadValue<Vector2>();
+        if(currentMovement.x > 0 || currentMovement.y > 0)
+            Debug.Log("Movemement Values " + movement.ReadValue<Vector2>());
+
         //forceDirection += movement.ReadValue<Vector2>().x * GetCameraRight(mainCamera) * GetMovementForce();
         //forceDirection += movement.ReadValue<Vector2>().y * GetCameraForward(mainCamera) * GetMovementForce();
         forceDirection += movement.ReadValue<Vector2>().x * Vector3.back * GetMovementForce();
@@ -131,7 +165,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnGrabPerformed(InputAction.CallbackContext obj)
     {
-        throw new NotImplementedException();
+        Debug.Log("Grab performed");
     }
 
     #endregion
@@ -140,7 +174,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnActionPerformed(InputAction.CallbackContext obj)
     {
-        throw new NotImplementedException();
+        Debug.Log("Action performed");
+    }
+
+    #endregion
+
+    #region On Join 
+
+    private void OnJoinPerformed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Join performed");
     }
 
     #endregion
@@ -151,6 +194,22 @@ public class PlayerController : MonoBehaviour
     {
         Ray ray = new Ray(this.transform.position + Vector3.up * 0.25f, Vector3.down);
         return Physics.Raycast(ray, out RaycastHit hit, 0.3f);            
+    }
+
+    #endregion
+
+    #region Color
+
+    private void SelectColor()
+    {
+        var playerMaterial = this.transform.Find("Capsule").gameObject.GetComponent<Material>();
+        playerMaterial.color = Color.red;
+
+        var player = GameObject.FindObjectsByType<PlayerController>(FindObjectsSortMode.InstanceID);
+        if(player.Length == 0)
+            playerMaterial.color = Color.red;
+        else
+            playerMaterial.color = Color.blue;
     }
 
     #endregion

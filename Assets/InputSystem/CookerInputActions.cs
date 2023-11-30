@@ -62,6 +62,15 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Join"",
+                    ""type"": ""Button"",
+                    ""id"": ""1abdbf05-f0cf-43f5-a194-54802de71c6d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +117,17 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63afca3d-8924-4df1-9735-7490c999445c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -120,6 +140,7 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
         m_Cooking_Grab = m_Cooking.FindAction("Grab", throwIfNotFound: true);
         m_Cooking_Run = m_Cooking.FindAction("Run", throwIfNotFound: true);
         m_Cooking_Action = m_Cooking.FindAction("Action", throwIfNotFound: true);
+        m_Cooking_Join = m_Cooking.FindAction("Join", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,6 +206,7 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Cooking_Grab;
     private readonly InputAction m_Cooking_Run;
     private readonly InputAction m_Cooking_Action;
+    private readonly InputAction m_Cooking_Join;
     public struct CookingActions
     {
         private @CookerInputActions m_Wrapper;
@@ -193,6 +215,7 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Grab => m_Wrapper.m_Cooking_Grab;
         public InputAction @Run => m_Wrapper.m_Cooking_Run;
         public InputAction @Action => m_Wrapper.m_Cooking_Action;
+        public InputAction @Join => m_Wrapper.m_Cooking_Join;
         public InputActionMap Get() { return m_Wrapper.m_Cooking; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -214,6 +237,9 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
             @Action.started += instance.OnAction;
             @Action.performed += instance.OnAction;
             @Action.canceled += instance.OnAction;
+            @Join.started += instance.OnJoin;
+            @Join.performed += instance.OnJoin;
+            @Join.canceled += instance.OnJoin;
         }
 
         private void UnregisterCallbacks(ICookingActions instance)
@@ -230,6 +256,9 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
             @Action.started -= instance.OnAction;
             @Action.performed -= instance.OnAction;
             @Action.canceled -= instance.OnAction;
+            @Join.started -= instance.OnJoin;
+            @Join.performed -= instance.OnJoin;
+            @Join.canceled -= instance.OnJoin;
         }
 
         public void RemoveCallbacks(ICookingActions instance)
@@ -253,5 +282,6 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
         void OnGrab(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnAction(InputAction.CallbackContext context);
+        void OnJoin(InputAction.CallbackContext context);
     }
 }
