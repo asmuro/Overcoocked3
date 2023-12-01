@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 13966, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: SampleScene
+  m_EditorClassIdentifier: 
+  templateScene: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+  templateName: Multiplayer local co-op
+  description: A multiplayer scene configurated with two gamepads. Start button for
+    the players to appear.
+  preview: {fileID: 0}
+  dependencies:
+  - dependency: {fileID: 6404511837564194268, guid: c36a759bdcdd27042ac9024a97edd7ac, type: 3}
+    instantiationMode: 0
+  - dependency: {fileID: -944628639613478452, guid: 3e66fe3fbe0d12b4a97399ced5b93d71, type: 3}
+    instantiationMode: 1
+  - dependency: {fileID: 2100000, guid: ff15f973b65195c44a7ebc68ba93c3a2, type: 2}
+    instantiationMode: 0
+  - dependency: {fileID: 2800000, guid: 40265a896a0f341bb956e90c59025a29, type: 3}
+    instantiationMode: 1
+  templatePipeline: {fileID: 0}
+  badge: {fileID: 0}
+  addToDefaults: 0
