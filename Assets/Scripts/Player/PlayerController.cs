@@ -16,9 +16,11 @@ public class PlayerController : MonoBehaviour
     private InputActionMap player;
     private InputAction movement;
     private IPlayerService playerService;
+    private IPlayerGrabService playerGrabService;
     private Rigidbody rigidBody;
     private Vector3 forceDirection = Vector3.zero;
     private bool isRunning;
+    private bool shouldGrab = false;
 
     [SerializeField]
     private float movementForce = 1f;
@@ -67,6 +69,9 @@ public class PlayerController : MonoBehaviour
 
         this.playerService = GameObject.FindGameObjectsWithTag("Services").First().GetComponent<IPlayerService>();
         this.playerService.RegisterPlayer(this);
+        
+        this.playerGrabService = this.GetComponent<IPlayerGrabService>();        
+        
     }
 
     
@@ -88,11 +93,12 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector2 currentMovement = movement.ReadValue<Vector2>();
-        if(currentMovement.x > 0 || currentMovement.y > 0)
-            Debug.Log("Movemement Values " + movement.ReadValue<Vector2>());
-
-        //forceDirection += movement.ReadValue<Vector2>().x * GetCameraRight(mainCamera) * GetMovementForce();
-        //forceDirection += movement.ReadValue<Vector2>().y * GetCameraForward(mainCamera) * GetMovementForce();
+        if (currentMovement.x > 0 || currentMovement.y > 0)
+        {
+            int a = 0;
+            //Debug.Log("Movemement Values " + movement.ReadValue<Vector2>());
+        }
+        
         forceDirection += movement.ReadValue<Vector2>().x * Vector3.back * GetMovementForce();
         forceDirection += movement.ReadValue<Vector2>().y * Vector3.right * GetMovementForce();
 
@@ -104,6 +110,12 @@ public class PlayerController : MonoBehaviour
         if(horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
         {
             this.rigidBody.velocity = horizontalVelocity.normalized * maxSpeed + Vector3.up * this.rigidBody.velocity.y;
+        }
+
+        if (this.shouldGrab)
+        {
+            this.shouldGrab = false;
+            this.playerGrabService.Grab();
         }
     }
 
@@ -154,7 +166,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnGrabPerformed(InputAction.CallbackContext obj)
     {
-        Debug.Log("Grab performed");
+        Debug.Log("Grab on grabable object performed");
+        this.shouldGrab = true;
+        
     }
 
     #endregion
