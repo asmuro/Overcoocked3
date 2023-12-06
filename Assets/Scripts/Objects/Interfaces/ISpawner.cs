@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Services.Interfaces
+namespace Assets.Scripts.Objects.Interfaces
 {
-    internal interface IPlayerGrabService
+    internal interface ISpawner
     {
-        void Grab();
-
-        bool IsGrabbing();
+        void Spawn();
     }
 }

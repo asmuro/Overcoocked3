@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Objects.Interfaces
+namespace Assets.Scripts.Services.Interfaces
 {
-    internal interface IActionable
+    internal interface IPlayerSpawnerService
     {
-
-        void Action();
+        void Spawn();
     }
 }

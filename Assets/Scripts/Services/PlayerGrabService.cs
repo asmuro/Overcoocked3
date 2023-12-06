@@ -1,3 +1,4 @@
+using Assets.Scripts.Objects.Interfaces;
 using Assets.Scripts.Services.Interfaces;
 using System;
 using System.Collections;
@@ -34,12 +35,17 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent.tag == "Grabable"
+        if (this.IsGrabable(other.transform.parent)
             && !this.grabableObjects.Contains(other.transform.parent.gameObject))
         {
             this.grabableObjects.Add(other.transform.parent.gameObject);
         }
         Debug.Log("OnTriggerEnter");
+    }
+
+    private bool IsGrabable(Transform gameObject)
+    {
+        return gameObject.GetComponent<IGrabable>() != null;
     }
 
     private void OnTriggerStay(Collider other)
@@ -55,7 +61,7 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.transform.parent.tag == "Grabable")
+        if (this.IsGrabable(other.transform.parent))
         {
             if (this.grabableObjects.Contains(other.transform.parent.gameObject))
             {
@@ -96,6 +102,11 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
             Debug.Log("Player Grab Service: Grab executed");
         }
+    }
+
+    public bool IsGrabbing()
+    {
+        return this.grabingObject != null;
     }
 
     private void Loose()

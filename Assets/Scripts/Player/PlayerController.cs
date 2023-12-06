@@ -17,10 +17,12 @@ public class PlayerController : MonoBehaviour
     private InputAction movement;
     private IPlayerService playerService;
     private IPlayerGrabService playerGrabService;
+    private IPlayerSpawnerService playerSpawnerService;
     private Rigidbody rigidBody;
     private Vector3 forceDirection = Vector3.zero;
     private bool isRunning;
     private bool shouldGrab = false;
+    private bool shouldExecuteAction = false;
 
     [SerializeField]
     private float movementForce = 1f;
@@ -70,8 +72,10 @@ public class PlayerController : MonoBehaviour
         this.playerService = GameObject.FindGameObjectsWithTag("Services").First().GetComponent<IPlayerService>();
         this.playerService.RegisterPlayer(this);
         
-        this.playerGrabService = this.GetComponent<IPlayerGrabService>();        
-        
+        this.playerGrabService = this.GetComponent<IPlayerGrabService>();
+        this.playerSpawnerService = this.GetComponent<IPlayerSpawnerService>();
+
+
     }
 
     
@@ -116,7 +120,12 @@ public class PlayerController : MonoBehaviour
         {
             this.shouldGrab = false;
             this.playerGrabService.Grab();
-        }
+            if (!this.playerGrabService.IsGrabbing())
+            {
+                this.playerSpawnerService.Spawn();
+                //this.playerGrabService.Grab();
+            }
+        }       
 
         LookAt();
     }
