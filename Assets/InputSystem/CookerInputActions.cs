@@ -66,7 +66,7 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Join"",
                     ""type"": ""Button"",
-                    ""id"": ""1abdbf05-f0cf-43f5-a194-54802de71c6d"",
+                    ""id"": ""11c79904-25d6-47f7-81cc-9e77eb0bc366"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -120,7 +120,7 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""63afca3d-8924-4df1-9735-7490c999445c"",
+                    ""id"": ""b0e3c855-e175-4a46-82f6-a08650b258ed"",
                     ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -130,6 +130,12 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""0b9ccfcd-5fdd-4c93-b08c-81eaadf35a27"",
+            ""actions"": [],
+            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
@@ -141,6 +147,8 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
         m_Cooking_Run = m_Cooking.FindAction("Run", throwIfNotFound: true);
         m_Cooking_Action = m_Cooking.FindAction("Action", throwIfNotFound: true);
         m_Cooking_Join = m_Cooking.FindAction("Join", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -276,6 +284,44 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public CookingActions @Cooking => new CookingActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    public struct UIActions
+    {
+        private @CookerInputActions m_Wrapper;
+        public UIActions(@CookerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     public interface ICookingActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -283,5 +329,8 @@ public partial class @CookerInputActions: IInputActionCollection2, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnAction(InputAction.CallbackContext context);
         void OnJoin(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
     }
 }

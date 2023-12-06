@@ -44,7 +44,7 @@
                 {
                     "name": "Join",
                     "type": "Button",
-                    "id": "1abdbf05-f0cf-43f5-a194-54802de71c6d",
+                    "id": "11c79904-25d6-47f7-81cc-9e77eb0bc366",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -98,7 +98,7 @@
                 },
                 {
                     "name": "",
-                    "id": "63afca3d-8924-4df1-9735-7490c999445c",
+                    "id": "b0e3c855-e175-4a46-82f6-a08650b258ed",
                     "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
@@ -108,6 +108,12 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "0b9ccfcd-5fdd-4c93-b08c-81eaadf35a27",
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": []

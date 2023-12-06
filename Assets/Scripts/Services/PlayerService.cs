@@ -16,28 +16,14 @@ namespace Assets.Scripts.Managers
 
         #endregion
 
-        private void SetColor(PlayerController player)
-        {
-            if (!this.players.Contains(player))
-                return;
-
-            var playerMaterial = player.transform.Find("Capsule").gameObject.GetComponent<Renderer>().material;
-            switch (players.IndexOf(player))
-            {
-                case 0:
-                    playerMaterial.color = Color.red;
-                    break;
-                case 1:
-                    playerMaterial.color = Color.blue;
-                    break;
-            }
-        }
+        #region Register Players
 
         public void RegisterPlayer(PlayerController player)
         {
             this.players.Add(player);
-            this.SetColor(player);
-        }        
+            
+        }
 
+        #endregion
     }
 }

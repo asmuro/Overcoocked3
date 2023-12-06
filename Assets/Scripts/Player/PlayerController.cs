@@ -62,8 +62,8 @@ public class PlayerController : MonoBehaviour
         this.player.FindAction(GRAB_ACTION_NAME).performed += OnGrabPerformed;
         this.player.FindAction(GRAB_ACTION_NAME).Enable();
 
-        this.player.FindAction(JOIN_ACTION_NAME).performed += OnJoinPerformed;
-        this.player.FindAction(JOIN_ACTION_NAME).Enable();
+        //this.player.FindAction(JOIN_ACTION_NAME).performed += OnJoinPerformed;
+        //this.player.FindAction(JOIN_ACTION_NAME).Enable();
 
         this.player.Enable();
 
@@ -82,11 +82,11 @@ public class PlayerController : MonoBehaviour
         this.player.FindAction(RUN_ACTION_NAME).Disable();
         this.player.FindAction(ACTION_ACTION_NAME).Disable();
         this.player.FindAction(GRAB_ACTION_NAME).Disable();
-        this.player.FindAction(JOIN_ACTION_NAME).Disable();        
+        //this.player.FindAction(JOIN_ACTION_NAME).Disable();        
         this.player.FindAction(RUN_ACTION_NAME).performed -= OnRunPerformed;
         this.player.FindAction(ACTION_ACTION_NAME).performed -= OnActionPerformed;
         this.player.FindAction(GRAB_ACTION_NAME).performed -= OnGrabPerformed;
-        this.player.FindAction(JOIN_ACTION_NAME).performed -= OnJoinPerformed;
+        //this.player.FindAction(JOIN_ACTION_NAME).performed -= OnJoinPerformed;
         this.player.Disable();
     }
 
@@ -205,9 +205,6 @@ public class PlayerController : MonoBehaviour
 
     #region Look At
 
-    #region Look
-
-
     private void LookAt()
     {
         Vector3 direction = rigidBody.velocity;
@@ -222,8 +219,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #endregion
+    #endregion   
 
 }
