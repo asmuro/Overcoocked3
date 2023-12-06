@@ -11,21 +11,27 @@ public class PlayerInputManagerController : MonoBehaviour
     private PlayerInputManager playerInputManager;
     private int playersJoined = 0;
 
+    [SerializeField]
+    private Transform player1StartingPoint;
+    [SerializeField]
+    private Transform player2StartingPoint;
+
+
     #endregion
 
     #region MonoBehaviour
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         this.playerInputManager = GetComponent<PlayerInputManager>();
         this.playerInputManager.onPlayerJoined += OnPlayerJoined;
     }   
 
     // Update is called once per frame
-    void Update()
+    void OnDisable()
     {
-        
+        this.playerInputManager.onPlayerJoined -= OnPlayerJoined;
     }
 
     #endregion
@@ -45,9 +51,11 @@ public class PlayerInputManagerController : MonoBehaviour
         {
             case 1:
                 playerMaterial.color = Color.red;
+                player.transform.position = player1StartingPoint.position;
                 break;
             case 2:
                 playerMaterial.color = Color.blue;
+                player.transform.position = player2StartingPoint.position;
                 break;
         }
     }
