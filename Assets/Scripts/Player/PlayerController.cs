@@ -117,6 +117,8 @@ public class PlayerController : MonoBehaviour
             this.shouldGrab = false;
             this.playerGrabService.Grab();
         }
+
+        LookAt();
     }
 
     #endregion
@@ -201,9 +203,27 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Color
+    #region Look At
 
-    
+    #region Look
+
+
+    private void LookAt()
+    {
+        Vector3 direction = rigidBody.velocity;
+        direction.y = 0f;
+        if (movement.ReadValue<Vector2>().sqrMagnitude > 0.1f && direction.sqrMagnitude > 0.1f)
+        {
+            this.rigidBody.rotation = Quaternion.LookRotation(direction, Vector3.up);
+        }
+        else
+        {
+            rigidBody.angularVelocity = Vector3.zero;
+        }
+    }
 
     #endregion
+
+    #endregion
+
 }
