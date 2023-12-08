@@ -1,9 +1,11 @@
+using Assets.Scripts.Helpers;
 using Assets.Scripts.Objects.Interfaces;
 using Assets.Scripts.Services.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,8 +41,7 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
             && !this.grabableObjects.Contains(other.transform.parent.gameObject))
         {
             this.grabableObjects.Add(other.transform.parent.gameObject);
-        }
-        Debug.Log("OnTriggerEnter");
+        }        
     }
 
     private bool IsGrabable(Transform gameObject)
@@ -54,9 +55,6 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
         {
             return;
         }
-
-        
-        Debug.Log("OnTriggerStay");
     }
 
     private void OnTriggerExit(Collider other)
@@ -67,8 +65,7 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
             {
                 this.grabableObjects.Remove(other.transform.parent.gameObject);
             }
-        }
-        Debug.Log("OnTriggerExit");
+        }        
     }
 
 
@@ -92,7 +89,7 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
         if (CanGrab())
         {
-            this.grabingObject = GetClosestGrabableObject();
+            this.grabingObject = Operations3D.GetClosestObjectInNearby(this.transform, this.grabableObjects);
             this.grabingObject.GetComponent<Rigidbody>().isKinematic = true;
             this.grabingObject.transform.position = this.transform.Find("HandsPosition").transform.position;
             
@@ -118,33 +115,6 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
         
         Debug.Log("Player Grab Service: Loose executed");
     }
-
-    private GameObject GetClosestGrabableObject()
-    {
-        if (this.grabableObjects.Count == 1)
-        {
-            return this.grabableObjects.First();
-        }
-
-        if (this.grabableObjects.Count > 1)
-        {
-            GameObject closestGrabableObject = null;
-            float minDist = Mathf.Infinity;
-            Vector3 currentPos = transform.position;
-            foreach (GameObject currentGrabableObject in this.grabableObjects)
-            {
-                float dist = Vector3.Distance(currentGrabableObject.transform.position, currentPos);
-                if (dist < minDist)
-                {
-                    closestGrabableObject = currentGrabableObject;
-                    minDist = dist;
-                }
-            }
-            return closestGrabableObject;            
-        }
-
-        return new GameObject();
-    }
-
-        #endregion
+    
+    #endregion
 }

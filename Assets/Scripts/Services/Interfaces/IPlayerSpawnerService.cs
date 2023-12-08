@@ -8,6 +8,6 @@ namespace Assets.Scripts.Services.Interfaces
 {
     internal interface IPlayerSpawnerService
     {
-        void Spawn();
+        bool Spawn();
     }
 }

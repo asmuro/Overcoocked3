@@ -52,8 +52,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementForce: 1
-  runForce: 1
+  runForce: 10
+  runTime: 1
   maxSpeed: 5
+  maxSpeedRunning: 12
   mainCamera: {fileID: 0}
 --- !u!54 &2761571177664958850
 Rigidbody:
@@ -64,7 +66,7 @@ Rigidbody:
   m_GameObject: {fileID: 926170167578750463}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

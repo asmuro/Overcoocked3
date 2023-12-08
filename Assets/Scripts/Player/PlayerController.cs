@@ -22,16 +22,22 @@ public class PlayerController : MonoBehaviour
     private Vector3 forceDirection = Vector3.zero;
     private bool isRunning;
     private bool shouldGrab = false;
-    private bool shouldExecuteAction = false;
+    private float slowDownMaxSpeed;
 
     [SerializeField]
     private float movementForce = 1f;
     
     [SerializeField]
     private float runForce = 4f;
-    
+
+    [SerializeField]
+    private float runTime = 1f;
+
     [SerializeField]
     private float maxSpeed = 5f;
+
+    [SerializeField]
+    private float maxSpeedRunning = 12f;
 
     [SerializeField]
     private Camera mainCamera;    
@@ -62,10 +68,7 @@ public class PlayerController : MonoBehaviour
         this.player.FindAction(ACTION_ACTION_NAME).Enable();
 
         this.player.FindAction(GRAB_ACTION_NAME).performed += OnGrabPerformed;
-        this.player.FindAction(GRAB_ACTION_NAME).Enable();
-
-        //this.player.FindAction(JOIN_ACTION_NAME).performed += OnJoinPerformed;
-        //this.player.FindAction(JOIN_ACTION_NAME).Enable();
+        this.player.FindAction(GRAB_ACTION_NAME).Enable();        
 
         this.player.Enable();
 
@@ -74,34 +77,28 @@ public class PlayerController : MonoBehaviour
         
         this.playerGrabService = this.GetComponent<IPlayerGrabService>();
         this.playerSpawnerService = this.GetComponent<IPlayerSpawnerService>();
-
-
-    }
-
-    
+    }    
 
     private void OnDisable()
     {
         this.movement.Disable();
         this.player.FindAction(RUN_ACTION_NAME).Disable();
         this.player.FindAction(ACTION_ACTION_NAME).Disable();
-        this.player.FindAction(GRAB_ACTION_NAME).Disable();
-        //this.player.FindAction(JOIN_ACTION_NAME).Disable();        
+        this.player.FindAction(GRAB_ACTION_NAME).Disable();        
         this.player.FindAction(RUN_ACTION_NAME).performed -= OnRunPerformed;
         this.player.FindAction(ACTION_ACTION_NAME).performed -= OnActionPerformed;
-        this.player.FindAction(GRAB_ACTION_NAME).performed -= OnGrabPerformed;
-        //this.player.FindAction(JOIN_ACTION_NAME).performed -= OnJoinPerformed;
+        this.player.FindAction(GRAB_ACTION_NAME).performed -= OnGrabPerformed;        
         this.player.Disable();
     }
 
     private void FixedUpdate()
     {
         Vector2 currentMovement = movement.ReadValue<Vector2>();
-        if (currentMovement.x > 0 || currentMovement.y > 0)
-        {
-            int a = 0;
-            //Debug.Log("Movemement Values " + movement.ReadValue<Vector2>());
-        }
+        //if (currentMovement.x > 0 || currentMovement.y > 0)
+        //{
+        //    int a = 0;
+        //    Debug.Log("Movemement Values " + movement.ReadValue<Vector2>());
+        //}
         
         forceDirection += movement.ReadValue<Vector2>().x * Vector3.back * GetMovementForce();
         forceDirection += movement.ReadValue<Vector2>().y * Vector3.right * GetMovementForce();
@@ -111,10 +108,8 @@ public class PlayerController : MonoBehaviour
 
         Vector3 horizontalVelocity = this.rigidBody.velocity;
         horizontalVelocity.y = 0;
-        if(horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
-        {
-            this.rigidBody.velocity = horizontalVelocity.normalized * maxSpeed + Vector3.up * this.rigidBody.velocity.y;
-        }
+
+        this.rigidBody.velocity = this.GetVelocity(horizontalVelocity);
 
         if (this.shouldGrab)
         {
@@ -122,10 +117,18 @@ public class PlayerController : MonoBehaviour
             this.playerGrabService.Grab();
             if (!this.playerGrabService.IsGrabbing())
             {
-                this.playerSpawnerService.Spawn();
-                //this.playerGrabService.Grab();
+                if (this.playerSpawnerService.Spawn())
+                {
+                    this.playerGrabService.Grab();
+                }
             }
-        }       
+        }
+        if (this.isRunning)
+        {
+            this.isRunning = false;
+            this.slowDownMaxSpeed = this.maxSpeedRunning;
+            StartCoroutine(this.SlowDownCoroutine());
+        }
 
         LookAt();
     }
@@ -157,20 +160,64 @@ public class PlayerController : MonoBehaviour
         if(IsGrounded())
         {
             this.isRunning = true;
+            Debug.Log("OnRunPerformed: true ");
         }
     }
 
     private float GetMovementForce()
     {
         if(this.isRunning)
-        {
-            this.isRunning = false;
+        {            
             return runForce;            
         }
 
         return this.movementForce;
     }
 
+    private Vector3 GetVelocity(Vector3 horizontalVelocity)
+    {
+        if (this.isRunning)
+        {
+            return horizontalVelocity.normalized * this.maxSpeedRunning + Vector3.up * this.rigidBody.velocity.y;                       
+        }
+        else
+        {
+            var currentMaxSpeed = this.GetMaxSpeed();
+            if (horizontalVelocity.sqrMagnitude > currentMaxSpeed * currentMaxSpeed)
+            {
+                return horizontalVelocity.normalized * currentMaxSpeed + Vector3.up * this.rigidBody.velocity.y;
+            }
+        }
+
+        return horizontalVelocity;
+    }
+
+    private float GetMaxSpeed()
+    {
+        if (this.slowDownMaxSpeed > this.maxSpeed)
+        {
+            return this.slowDownMaxSpeed;
+        }
+
+        return this.maxSpeed;
+    }
+
+    public IEnumerator SlowDownCoroutine()
+    {
+        var speedDifference = Mathf.Abs(this.slowDownMaxSpeed - this.maxSpeed);        
+
+        while (speedDifference > 0.01f)
+        {           
+            Debug.Log($"speedDifference: {speedDifference}");
+            this.slowDownMaxSpeed -= (speedDifference / 150f);
+            speedDifference = Mathf.Abs(this.slowDownMaxSpeed - this.maxSpeed);
+            yield return null;            
+        }
+
+        this.slowDownMaxSpeed = this.maxSpeed;
+        yield return 0;        
+    }
+   
     #endregion
 
     #region Grab
@@ -207,7 +254,8 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         Ray ray = new Ray(this.transform.position + Vector3.up * 0.25f, Vector3.down);
-        return Physics.Raycast(ray, out RaycastHit hit, 0.3f);            
+        RaycastHit hit;
+        return Physics.Raycast(ray, out hit, 1.3f);            
     }
 
     #endregion
