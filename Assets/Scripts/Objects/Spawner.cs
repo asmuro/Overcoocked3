@@ -22,9 +22,9 @@ namespace Assets.Scripts.Objects
 
         #region IActionable
 
-        void ISpawner.Spawn()
+        GameObject ISpawner.Spawn()
         {
-            var newObject = Instantiate(objectToSpawn, prefabPoint.position, Quaternion.identity);
+            return Instantiate(objectToSpawn, prefabPoint.position, Quaternion.identity);
         }
 
         #endregion

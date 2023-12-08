@@ -37,11 +37,7 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
     private void OnTriggerEnter(Collider other)
     {
-        if (this.IsGrabable(other.transform.parent)
-            && !this.grabableObjects.Contains(other.transform.parent.gameObject))
-        {
-            this.grabableObjects.Add(other.transform.parent.gameObject);
-        }        
+        this.AddObjectToNearbyGrabableObjects(other.transform.parent);        
     }
 
     private bool IsGrabable(Transform gameObject)
@@ -54,6 +50,15 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
         if(other.transform.parent.tag == "Floor")
         {
             return;
+        }
+    }
+
+    private void AddObjectToNearbyGrabableObjects(Transform transform)
+    {
+        if (this.IsGrabable(transform)
+            && !this.grabableObjects.Contains(transform.gameObject))
+        {
+            this.grabableObjects.Add(transform.gameObject);
         }
     }
 
@@ -115,6 +120,12 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
         
         Debug.Log("Player Grab Service: Loose executed");
     }
-    
+
+    public void GrabSpawnedObject(GameObject spawnedObject)
+    {
+        this.AddObjectToNearbyGrabableObjects(spawnedObject.transform);
+        this.Grab();
+    }
+
     #endregion
 }

@@ -117,9 +117,10 @@ public class PlayerController : MonoBehaviour
             this.playerGrabService.Grab();
             if (!this.playerGrabService.IsGrabbing())
             {
-                if (this.playerSpawnerService.Spawn())
+                var spawnedObject = this.playerSpawnerService.Spawn();
+                if (!spawnedObject.name.Contains(NEW_NAME))
                 {
-                    this.playerGrabService.Grab();
+                    this.playerGrabService.GrabSpawnedObject(spawnedObject);
                 }
             }
         }

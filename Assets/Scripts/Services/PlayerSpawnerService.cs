@@ -15,8 +15,8 @@ public class PlayerSpawnerService : MonoBehaviour, IPlayerSpawnerService
 
     #region Fields
 
-    private GameObject actionObject;
-    private List<GameObject> actionableObjects = new List<GameObject>();    
+    private GameObject spawner;
+    private List<GameObject> spawners = new List<GameObject>();    
 
     #endregion
 
@@ -29,9 +29,9 @@ public class PlayerSpawnerService : MonoBehaviour, IPlayerSpawnerService
     private void OnTriggerEnter(Collider other)
     {
         if (this.IsActionable(other.transform.parent)
-            && !this.actionableObjects.Contains(other.transform.parent.gameObject))
+            && !this.spawners.Contains(other.transform.parent.gameObject))
         {
-            this.actionableObjects.Add(other.transform.parent.gameObject);
+            this.spawners.Add(other.transform.parent.gameObject);
         }        
     }
 
@@ -52,9 +52,9 @@ public class PlayerSpawnerService : MonoBehaviour, IPlayerSpawnerService
     {
         if (this.IsActionable(other.transform.parent))
         {
-            if (this.actionableObjects.Contains(other.transform.parent.gameObject))
+            if (this.spawners.Contains(other.transform.parent.gameObject))
             {
-                this.actionableObjects.Remove(other.transform.parent.gameObject);
+                this.spawners.Remove(other.transform.parent.gameObject);
             }
         }        
     }
@@ -63,25 +63,25 @@ public class PlayerSpawnerService : MonoBehaviour, IPlayerSpawnerService
 
     #endregion
 
-    #region IPlayerGrabService
+    #region IPlayerSpawnerService
 
-    private bool CanExecuteAction()
+    private bool CanSpawn()
     {
-        return this.actionableObjects.Any() && this.actionObject == null;
+        return this.spawners.Any() && this.spawner == null;
     }
 
-    public bool Spawn()
+    public GameObject Spawn()
     {
-        if (!CanExecuteAction())
+        if (!CanSpawn())
         {
-            return false;
+            return new GameObject();
         }
 
-        this.actionObject = Operations3D.GetClosestObjectInNearby(this.transform, this.actionableObjects);
-        this.actionObject.GetComponent<ISpawner>().Spawn();
+        this.spawner = Operations3D.GetClosestObjectInNearby(this.transform, this.spawners);
+        var spawnedObject = this.spawner.GetComponent<ISpawner>().Spawn();
         Debug.Log("Player Action Service: Action executed");
-        this.actionObject = null;
-        return true;
+        this.spawner = null;
+        return spawnedObject;
     }        
     
     #endregion
