@@ -8,5 +8,7 @@ namespace Assets.Scripts.Objects.Interfaces
 {
     internal interface IGrabable
     {
+        bool IsBeingGrabbed { get; set; }
+
     }
 }

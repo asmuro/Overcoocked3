@@ -1,7 +1,6 @@
 using Assets.Scripts.Services.Interfaces;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -72,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
         this.player.Enable();
 
-        this.playerService = GameObject.FindGameObjectsWithTag("Services").First().GetComponent<IPlayerService>();
+        this.playerService = GameObject.FindGameObjectsWithTag("Services").First().transform.Find("Player Service").GetComponent<IPlayerService>();
         this.playerService.RegisterPlayer(this);
         
         this.playerGrabService = this.GetComponent<IPlayerGrabService>();

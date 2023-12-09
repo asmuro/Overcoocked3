@@ -1,22 +1,15 @@
 using Assets.Scripts.Helpers;
 using Assets.Scripts.Objects.Interfaces;
 using Assets.Scripts.Services.Interfaces;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 {
 
     #region Fields
 
-    private CapsuleCollider collider;
     private GameObject grabingObject;
     private List<GameObject> grabableObjects = new List<GameObject>();    
 
@@ -26,8 +19,6 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
     private void Awake()
     {
-        this.collider = this.GetComponent<CapsuleCollider>();
-        //this.collider.
 
     }
 
@@ -100,7 +91,8 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
             
             this.grabingObject.transform.parent = this.transform;
             this.grabingObject.transform.Find("3D").GetComponent<Collider>().enabled = false;
-            this.grabingObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f); ;
+            this.grabingObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            this.grabingObject.GetComponent<IGrabable>().IsBeingGrabbed = true;
 
             Debug.Log("Player Grab Service: Grab executed");
         }
@@ -116,6 +108,7 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
         this.grabingObject.transform.parent = null;
         this.grabingObject.GetComponent<Rigidbody>().isKinematic = false;
         this.grabingObject.transform.Find("3D").GetComponent<Collider>().enabled = true;
+        this.grabingObject.GetComponent<IGrabable>().IsBeingGrabbed = false;
         this.grabingObject = null;
         
         Debug.Log("Player Grab Service: Loose executed");
