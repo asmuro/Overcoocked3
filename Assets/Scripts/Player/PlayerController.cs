@@ -121,6 +121,10 @@ public class PlayerController : MonoBehaviour
                 {
                     this.playerGrabService.GrabSpawnedObject(spawnedObject);
                 }
+                else
+                {
+                    Destroy(spawnedObject);
+                }
             }
         }
         if (this.isRunning)

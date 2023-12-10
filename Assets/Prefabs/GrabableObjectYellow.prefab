@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2522537247594305139}
   - component: {fileID: 96136093729386488}
   - component: {fileID: 5025489230361956185}
+  - component: {fileID: 815852126726975346}
   m_Layer: 0
   m_Name: GrabableObjectYellow
   m_TagString: Grabable
@@ -73,6 +74,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20a5468f8a71cb2479a06dd021e8e7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &815852126726975346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091141741016733539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1936e5af96f475b47adac4e8a476be71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingredients:
+  - {fileID: 1268493827365607122, guid: c96cde386a1b6cb46ae04b24198b6a89, type: 3}
 --- !u!1 &5471746302839437844
 GameObject:
   m_ObjectHideFlags: 0

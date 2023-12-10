@@ -49,8 +49,18 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
         if (this.IsGrabable(transform)
             && !this.grabableObjects.Contains(transform.gameObject))
         {
+            transform.GetComponent<IGrabable>().OnDestroyed += OnDestroyedGrabableObject;            
             this.grabableObjects.Add(transform.gameObject);
         }
+    }
+
+    private void OnDestroyedGrabableObject(object sender, System.EventArgs e)
+    {
+        if(!this.grabableObjects.Contains((GameObject)sender))
+        {
+            return;
+        }
+        this.grabableObjects.Remove((GameObject)sender);        
     }
 
     private void OnTriggerExit(Collider other)

@@ -3,6 +3,7 @@ using Assets.Scripts.Objects.Interfaces;
 using Assets.Scripts.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class OrderService : MonoBehaviour, IOrderService
@@ -113,6 +114,8 @@ public class OrderService : MonoBehaviour, IOrderService
         //{
 
         //}
+        Destroy(((Recipe)recipeReceived).gameObject);
+        //DestroyImmediate((Object)recipeReceived);
     }
 
     #endregion  
