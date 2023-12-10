@@ -1,6 +1,7 @@
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Interfaces;
 using Assets.Scripts.Services.Interfaces;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -10,8 +11,9 @@ public class OrderService : MonoBehaviour, IOrderService
 {
     #region Fields
 
-    private List<IOrder> pendingOrders;
+    private List<IOrder> pendingOrders = new List<IOrder>();
     private IUIOrderService uiOrderService;
+    private bool waitingToGenerateNextOrder = false;
 
     [SerializeField]
     public List<OrderAndWeight> ordersAndWeights;
@@ -33,13 +35,16 @@ public class OrderService : MonoBehaviour, IOrderService
     void Start()
     {
         this.uiOrderService = FindAnyObjectByType<UIOrderService>();
-        this.AddOrdersToStart();
+        this.AddOrder();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(this.pendingOrders.Count == 0 && !this.waitingToGenerateNextOrder)
+        {
+            StartCoroutine(WaitToGenerateTheNextOrder(Random.Range(0.5f, 2f)));
+        }        
     }
 
     private void OnValidate()
@@ -59,7 +64,6 @@ public class OrderService : MonoBehaviour, IOrderService
 
     private void AddOrdersToStart()
     {
-        this.pendingOrders = new List<IOrder>();
         for (int i = 0; i < ordersToStart; i++)
         {
             this.pendingOrders.Add(GenerateRandomPendingOrder(ordersAndWeights));
@@ -67,6 +71,18 @@ public class OrderService : MonoBehaviour, IOrderService
 
         this.uiOrderService.RefreshOrders(this.pendingOrders);
     }
+
+    private void AddOrder()
+    {        
+        this.pendingOrders.Add(GenerateRandomPendingOrder(ordersAndWeights));
+        this.uiOrderService.RefreshOrders(this.pendingOrders);
+    }
+
+    private void RemoveOrder(IOrder orderToRemove)
+    {
+        this.pendingOrders.Remove(orderToRemove);
+        this.uiOrderService.RefreshOrders(this.pendingOrders);
+    }   
 
     public static IOrder GenerateRandomPendingOrder(List<OrderAndWeight> ordersAndWeights)
     {
@@ -95,27 +111,66 @@ public class OrderService : MonoBehaviour, IOrderService
         return ordersAndWeights[lastIndex].Order;
     }
 
+    IEnumerator WaitToGenerateTheNextOrder(float seconds)
+    {
+        this.waitingToGenerateNextOrder = true;
+        yield return new WaitForSeconds(seconds);
+        this.AddOrder();
+        this.waitingToGenerateNextOrder = false;
+    }
+
     #endregion
 
     #region ProcessOrders
 
-    //private bool IsRecipeReceivedExpected(IRecipe recipeReceived)
-    //{
-    //    this.pendingOrders.FirstOrDefault(o => o.)
-    //}
+    private bool IsRecipeReceivedExpected(IRecipe recipeReceived)
+    {
+        bool expectedRecipe = false;        
+        this.pendingOrders.ForEach(o =>
+        {
+            if(expectedRecipe)
+            {
+                return;
+            }
+            if (o.Recipe.Ingredients.Intersect(recipeReceived.Ingredients).Count() == o.Recipe.Ingredients.Count)
+            {
+                expectedRecipe = true;                
+            }            
+        });
+
+        return expectedRecipe;
+    }
+
+    private IOrder GetEquivalentExpectedRecipe(IRecipe receivedRecipe)
+    {
+        IOrder orderContainingReceivedRecipe = null;
+        this.pendingOrders.ForEach(o =>
+        {
+            if (orderContainingReceivedRecipe != null)
+            {
+                return;
+            }
+            if (o.Recipe.Ingredients.Intersect(receivedRecipe.Ingredients).Count() == o.Recipe.Ingredients.Count)
+            {
+                orderContainingReceivedRecipe = o;
+            }
+        });
+
+        return orderContainingReceivedRecipe;
+    }
 
     #endregion
 
     #region IOrderService
 
-    public void ProcessReceivedRecipe(IRecipe recipeReceived)
+    public void ProcessReceivedRecipe(IRecipe receivedRecipe)
     {
-        //if(this.IsOrderReceivedExpected())
-        //{
-
-        //}
-        Destroy(((Recipe)recipeReceived).gameObject);
-        //DestroyImmediate((Object)recipeReceived);
+        var orderContainingReceivedRecipe = GetEquivalentExpectedRecipe(receivedRecipe);
+        if (orderContainingReceivedRecipe != null)
+        {
+            this.RemoveOrder(orderContainingReceivedRecipe);
+        }
+        Destroy(((Recipe)receivedRecipe).gameObject);        
     }
 
     #endregion  

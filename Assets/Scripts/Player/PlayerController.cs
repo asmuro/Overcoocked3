@@ -163,8 +163,7 @@ public class PlayerController : MonoBehaviour
     {
         if(IsGrounded())
         {
-            this.isRunning = true;
-            Debug.Log("OnRunPerformed: true ");
+            this.isRunning = true;            
         }
     }
 
@@ -212,7 +211,6 @@ public class PlayerController : MonoBehaviour
 
         while (speedDifference > 0.01f)
         {           
-            Debug.Log($"speedDifference: {speedDifference}");
             this.slowDownMaxSpeed -= (speedDifference / 150f);
             speedDifference = Mathf.Abs(this.slowDownMaxSpeed - this.maxSpeed);
             yield return null;            
@@ -227,10 +225,8 @@ public class PlayerController : MonoBehaviour
     #region Grab
 
     private void OnGrabPerformed(InputAction.CallbackContext obj)
-    {
-        Debug.Log("Grab on grabable object performed");
-        this.shouldGrab = true;
-        
+    {        
+        this.shouldGrab = true;        
     }
 
     #endregion

@@ -31,6 +31,11 @@ public class UIOrderService : MonoBehaviour, IUIOrderService
 
     public void RefreshOrders(List<IOrder> orders)
     {
+        if (orders.Count == 0)
+        {
+            this.uiManager.RemoveOrder();
+        }
+
         foreach (var recipe in orders)
         {
             this.uiManager.AddOrder(recipe.Sprite);

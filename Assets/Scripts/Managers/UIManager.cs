@@ -44,5 +44,10 @@ public class UIManager : MonoBehaviour
         this.firstOrder.sprite = sprite;
     }
 
+    public void RemoveOrder()
+    {
+        this.firstOrder.enabled = false;        
+    }
+
     #endregion
 }
