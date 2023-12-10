@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private InputAction movement;
     private IPlayerService playerService;
     private IPlayerGrabService playerGrabService;
+    private IPlayerActionService playerActionService;
     private IPlayerSpawnerService playerSpawnerService;
     private Rigidbody rigidBody;
     private Vector3 forceDirection = Vector3.zero;
@@ -75,6 +76,7 @@ public class PlayerController : MonoBehaviour
         this.playerService.RegisterPlayer(this);
         
         this.playerGrabService = this.GetComponent<IPlayerGrabService>();
+        this.playerActionService = this.GetComponent<IPlayerActionService>();
         this.playerSpawnerService = this.GetComponent<IPlayerSpawnerService>();
     }    
 
@@ -235,6 +237,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnActionPerformed(InputAction.CallbackContext obj)
     {
+        this.playerActionService.ExecuteAction();
         Debug.Log("Action performed");
     }
 
