@@ -170,7 +170,7 @@ public class OrderService : MonoBehaviour, IOrderService
         {
             this.RemoveOrder(orderContainingReceivedRecipe);
         }
-        Destroy(((Recipe)receivedRecipe).gameObject);        
+        Destroy(((MonoBehaviour)receivedRecipe).gameObject);        
     }
 
     #endregion  

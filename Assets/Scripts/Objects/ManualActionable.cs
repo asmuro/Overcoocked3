@@ -38,48 +38,54 @@ namespace Assets.Scripts.Objects
         {
             if (this.startAction)
             {
-                this.startAction = false;
-                
-                this.healthBar.enabled = true;
-                if(this.timeConsumed > 0f)
-                {
-                    this.activeTime = this.timeConsumed;
-                }                
-                this.actionCoroutine = StartCoroutine(ActionTimeCounter(this.actionTime - this.timeConsumed));
+                this.StartNewAction();
             }
 
             if (this.stopAction)
             {
-                this.stopAction = false;
-                this.actionInProgress = false;
-                this.timeConsumed = this.activeTime;
-                this.activeTime = 0f;
-                if (this.actionCoroutine != null)
-                {
-                    StopCoroutine(this.actionCoroutine);
-                }
+                this.StopCurrentAction();
             }
 
             if(this.actionInProgress)
             {
-                this.activeTime += Time.deltaTime;
-                var percent = this.activeTime / this.actionTime;                
-                this.bar.fillAmount = Mathf.Lerp(0, 1, percent);
+                this.UpdateCurrentAction();
             }
-        }       
-
-        //private void OnTriggerExit(Collider other)
-        //{
-        //    var player = other.GetComponent<PlayerController>();
-        //    if (player != null)
-        //    {
-        //        this.stopAction = true;
-        //    }
-        //}
+        }      
 
         #endregion
 
         #region In Action
+
+        private void StartNewAction()
+        {
+            this.startAction = false;
+
+            this.healthBar.enabled = true;
+            if (this.timeConsumed > 0f)
+            {
+                this.activeTime = this.timeConsumed;
+            }
+            this.actionCoroutine = StartCoroutine(ActionTimeCounter(this.actionTime - this.timeConsumed));
+        }
+
+        private void StopCurrentAction()
+        {
+            this.stopAction = false;
+            this.actionInProgress = false;
+            this.timeConsumed = this.activeTime;
+            this.activeTime = 0f;
+            if (this.actionCoroutine != null)
+            {
+                StopCoroutine(this.actionCoroutine);
+            }
+        }
+
+        private void UpdateCurrentAction()
+        {
+            this.activeTime += Time.deltaTime;
+            var percent = this.activeTime / this.actionTime;
+            this.bar.fillAmount = Mathf.Lerp(0, 1, percent);
+        }
 
         IEnumerator ActionTimeCounter(float maxTime)
         {
@@ -103,7 +109,7 @@ namespace Assets.Scripts.Objects
 
         public event EventHandler OnActionFinished;
 
-        public void Action()
+        public void ExecuteAction()
         {
             this.startAction = true;
         }

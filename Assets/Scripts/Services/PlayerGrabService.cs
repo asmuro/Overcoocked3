@@ -19,12 +19,12 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
     private void OnTriggerEnter(Collider other)
     {
-        this.AddObjectToNearbyGrabableObjects(other.transform.parent);        
+        this.AddObjectToNearbyGrabableObjects(other.transform);        
     }
 
     private bool IsGrabable(Transform gameObject)
     {
-        return gameObject.GetComponent<IGrabable>() != null;
+        return gameObject?.GetComponent<IGrabable>() != null;
     }   
 
     private void AddObjectToNearbyGrabableObjects(Transform transform)
@@ -48,11 +48,11 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
     private void OnTriggerExit(Collider other)
     {
-        if (this.IsGrabable(other.transform.parent))
+        if (this.IsGrabable(other.transform))
         {
-            if (this.grabableObjects.Contains(other.transform.parent.gameObject))
+            if (this.grabableObjects.Contains(other.transform.gameObject))
             {
-                this.grabableObjects.Remove(other.transform.parent.gameObject);
+                this.grabableObjects.Remove(other.transform.gameObject);
             }
         }        
     }

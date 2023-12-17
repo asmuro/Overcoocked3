@@ -37,12 +37,12 @@ public class PlayerSpawnerService : MonoBehaviour, IPlayerSpawnerService
 
     private bool IsActionable(Transform gameObject)
     {
-        return gameObject.GetComponent<ISpawner>() != null;
+        return gameObject?.GetComponent<ISpawner>() != null;
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.transform.parent.tag == "Floor")
+        if(other.transform.parent?.tag == "Floor")
         {
             return;
         }        

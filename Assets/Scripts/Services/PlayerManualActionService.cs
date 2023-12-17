@@ -25,7 +25,7 @@ public class PlayerManualActionService : MonoBehaviour, IPlayerActionService
 
     private bool IsActionable(Transform gameObject)
     {
-        return gameObject.GetComponent<IActionable>() != null;
+        return gameObject?.GetComponent<IActionable>() != null;
     }    
 
     private void AddObjectToNearbyActionableObjects(Transform transform)
@@ -75,7 +75,7 @@ public class PlayerManualActionService : MonoBehaviour, IPlayerActionService
         }
 
         this.actionInProgress = Operations3D.GetClosestObjectInNearby(this.transform, this.actionableObjects);
-        this.actionInProgress.GetComponent<IActionable>().Action();
+        this.actionInProgress.GetComponent<IActionable>().ExecuteAction();
         Debug.Log("Player Action Service: Action executed");
     }
 

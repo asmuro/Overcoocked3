@@ -14,7 +14,7 @@ namespace Assets.Scripts.Objects
 
         public event EventHandler OnActionFinished;
 
-        public void Action()
+        public void ExecuteAction()
         {
             throw new NotImplementedException();
         }

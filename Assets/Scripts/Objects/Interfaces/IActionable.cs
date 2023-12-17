@@ -8,7 +8,7 @@ namespace Assets.Scripts.Objects.Interfaces
 {
     internal interface IActionable
     {
-        void Action();
+        void ExecuteAction();
 
         event EventHandler OnActionFinished;
 

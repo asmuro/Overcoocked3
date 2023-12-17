@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static Assets.Scripts.Constants;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPlayer
 {
 
     #region Fields
@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool isRunning;
     private bool shouldGrab = false;
     private float slowDownMaxSpeed;
+    private GameObject spawnedObject;
 
     [SerializeField]
     private float movementForce = 1f;
@@ -40,7 +41,9 @@ public class PlayerController : MonoBehaviour
     private float maxSpeedRunning = 12f;
 
     [SerializeField]
-    private Camera mainCamera;    
+    private Camera mainCamera;
+
+    public event EventHandler OnGrabPressed;
 
     #endregion
 
@@ -112,21 +115,29 @@ public class PlayerController : MonoBehaviour
 
         this.rigidBody.velocity = this.GetVelocity(horizontalVelocity);
 
+        if (this.shouldGrab && spawnedObject != null)
+        {
+            this.shouldGrab = false;
+            this.playerGrabService.GrabSpawnedObject(spawnedObject);
+            this.spawnedObject = null;
+        }
+
         if (this.shouldGrab)
         {
             this.shouldGrab = false;
             this.playerGrabService.Grab();
             if (!this.playerGrabService.IsGrabbing())
             {
-                var spawnedObject = this.playerSpawnerService.Spawn();
-                if (!spawnedObject.name.Contains(NEW_NAME))
-                {
-                    this.playerGrabService.GrabSpawnedObject(spawnedObject);
-                }
-                else
-                {
-                    Destroy(spawnedObject);
-                }
+                this.OnGrabPressed?.Invoke(this, EventArgs.Empty);
+                //var spawnedObject = this.playerSpawnerService.Spawn();
+                //if (!spawnedObject.name.Contains(NEW_NAME))
+                //{
+                //    this.playerGrabService.GrabSpawnedObject(spawnedObject);
+                //}
+                //else
+                //{
+                //    Destroy(spawnedObject);
+                //}
             }
         }
         if (this.isRunning)
@@ -229,6 +240,12 @@ public class PlayerController : MonoBehaviour
     private void OnGrabPerformed(InputAction.CallbackContext obj)
     {        
         this.shouldGrab = true;        
+    }
+
+    public void SpawnerOnObjectSpawned(GameObject spawnedObject)
+    {
+        this.shouldGrab = true;
+        this.spawnedObject = spawnedObject;
     }
 
     #endregion
