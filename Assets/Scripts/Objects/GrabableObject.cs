@@ -14,10 +14,42 @@ namespace Assets.Scripts.Objects
 
         public event EventHandler OnDestroyed;
 
+        private IChoppable choppable;
+
+        #endregion
+
+        #region MonoBehaviour
+
+        private void Awake()
+        {
+            this.choppable = this.GetComponent<IChoppable>();            
+        }
+
+        #endregion
+
+        #region Methods
+
+        public bool CanBeGrabbed()
+        {
+            if(this.choppable == null)
+            {
+                return true;
+            }
+
+            return this.choppable.ChopActionTimeConsumed == 0 
+                || (this.choppable.ChopActionTimeConsumed > 0 && this.choppable.ChopActionTimeConsumed >= this.choppable.ChopTotalActionTime);
+        }
+
+        #endregion
+
+        #region OnDestroy
+
         private void OnDestroy()
         {
             this.OnDestroyed?.Invoke(this.transform.gameObject, EventArgs.Empty);
         }
+
+        
 
         #endregion
     }

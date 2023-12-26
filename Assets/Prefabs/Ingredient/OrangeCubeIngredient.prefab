@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6679498580167216291}
+  - component: {fileID: 9175662389364773842}
+  - component: {fileID: 8387510339054628986}
+  - component: {fileID: 8196784692474531972}
   m_Layer: 0
   m_Name: OrangeCubeIngredient
   m_TagString: Untagged
@@ -31,3 +34,47 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9175662389364773842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651371581271635999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d24d3d43072844b4786e339e64221854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingredientName: Orange
+--- !u!114 &8387510339054628986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651371581271635999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb0fa908c53cbb41a43f59d47b5dff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isChoppable: 1
+  chopTotalActionTime: 1.5
+--- !u!114 &8196784692474531972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651371581271635999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b9f2abc0d5eb342a021924f6c37abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCookable: 1
+  cookTotalActionTime: 1.5
+  fromCookTimeToBurn: 2
+  startAlertTimeBeforeBurn: 1
+  burnedIcon: {fileID: 1749503559347464285, guid: 972032f15d584e543aa29a0233b5dfa4, type: 3}

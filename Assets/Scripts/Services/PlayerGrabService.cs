@@ -65,7 +65,8 @@ public class PlayerGrabService : MonoBehaviour, IPlayerGrabService
 
     private bool CanGrab()
     {
-        return this.grabableObjects.Any() && this.grabingObject == null;
+        return this.grabableObjects.Any() && this.grabingObject == null
+            && Operations3D.GetClosestObjectInNearby(this.transform, this.grabableObjects).GetComponent<IGrabable>().CanBeGrabbed();
     }
 
     public void Grab()

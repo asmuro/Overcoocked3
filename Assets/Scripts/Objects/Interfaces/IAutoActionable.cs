@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Objects.Interfaces
 {
-    internal interface IGrabable
+    internal interface IAutoActionable
     {
-        bool IsBeingGrabbed { get; set; }
-
-        bool CanBeGrabbed();
-
-        event EventHandler OnDestroyed;
+        event EventHandler OnCookableObjectBurned;        
     }
 }

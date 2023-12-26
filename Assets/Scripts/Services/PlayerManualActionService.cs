@@ -20,7 +20,7 @@ public class PlayerManualActionService : MonoBehaviour, IPlayerActionService
 
     private void OnTriggerEnter(Collider other)
     {
-        this.AddObjectToNearbyActionableObjects(other.transform.parent);        
+        this.AddObjectToNearbyActionableObjects(other.transform);        
     }
 
     private bool IsActionable(Transform gameObject)
@@ -45,13 +45,13 @@ public class PlayerManualActionService : MonoBehaviour, IPlayerActionService
 
     private void OnTriggerExit(Collider other)
     {
-        if (this.IsActionable(other.transform.parent))
+        if (this.IsActionable(other.transform))
         {
-            if (this.actionableObjects.Contains(other.transform.parent.gameObject))
+            if (this.actionableObjects.Contains(other.transform.gameObject))
             {
-                other.transform.parent.GetComponent<IActionable>().StopAction();
+                other.transform.GetComponent<IActionable>().StopAction();
                 this.actionInProgress = null;
-                this.actionableObjects.Remove(other.transform.parent.gameObject);
+                this.actionableObjects.Remove(other.transform.gameObject);
             }
         }        
     }

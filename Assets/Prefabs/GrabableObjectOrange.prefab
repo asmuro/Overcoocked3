@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 2522537247594305139}
   - component: {fileID: 96136093729386488}
   - component: {fileID: 5025489230361956185}
-  - component: {fileID: -6429640575289168011}
   - component: {fileID: 5942399732471084470}
+  - component: {fileID: 6257105992882051657}
+  - component: {fileID: -9105617374569437789}
+  - component: {fileID: 1133127114937269524}
   m_Layer: 0
   m_Name: GrabableObjectOrange
   m_TagString: Grabable
@@ -75,20 +77,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20a5468f8a71cb2479a06dd021e8e7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6429640575289168011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2091141741016733539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1936e5af96f475b47adac4e8a476be71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ingredients:
-  - {fileID: 3651371581271635999, guid: ae847fe90355b1b4aae119bac766e8d4, type: 3}
 --- !u!65 &5942399732471084470
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -110,6 +98,50 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.7, z: 0.7}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6257105992882051657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091141741016733539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d24d3d43072844b4786e339e64221854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingredientName: Orange
+--- !u!114 &-9105617374569437789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091141741016733539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b9f2abc0d5eb342a021924f6c37abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCookable: 1
+  cookTotalActionTime: 1.5
+  fromCookTimeToBurn: 2
+  startAlertTimeBeforeBurn: 1
+  burnedIcon: {fileID: 1749503559347464285, guid: 972032f15d584e543aa29a0233b5dfa4, type: 3}
+--- !u!114 &1133127114937269524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091141741016733539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb0fa908c53cbb41a43f59d47b5dff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isChoppable: 1
+  chopTotalActionTime: 1.5
 --- !u!1 &5471746302839437844
 GameObject:
   m_ObjectHideFlags: 0

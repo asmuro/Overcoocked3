@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Enumerables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Objects.Interfaces
 {
-    internal interface IGrabable
+    internal interface IIngredient
     {
-        bool IsBeingGrabbed { get; set; }
+        string Name { get; }
 
-        bool CanBeGrabbed();
-
-        event EventHandler OnDestroyed;
+        IngredientState State { get; }
     }
 }

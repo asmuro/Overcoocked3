@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1924291895048463589}
+  - component: {fileID: 3343677100647019310}
   m_Layer: 0
   m_Name: YellowCubeIngredient
   m_TagString: Untagged
@@ -31,3 +32,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3343677100647019310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268493827365607122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d24d3d43072844b4786e339e64221854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingredientName: L
+  isChoppable: 0
+  chopTotalActionTime: 1.5
