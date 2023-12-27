@@ -36,7 +36,7 @@ namespace Assets.Scripts.Objects
 
         private void Update()
         {
-            if (this.isBurned)
+            if (this.isBurned && !this.burnedIcon.activeSelf)
             {
                 burnedIcon.SetActive(true);
             }

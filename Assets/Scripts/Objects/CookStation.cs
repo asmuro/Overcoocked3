@@ -84,7 +84,7 @@ public class CookStation : MonoBehaviour, IAutoActionable
     private void StartNewAction()
     {
         this.startAction = false;
-
+        this.bar.color = Color.green;
         this.healthBar.enabled = true;
         if (this.Cookable.CookActionTimeConsumed > 0f)
         {
@@ -99,7 +99,7 @@ public class CookStation : MonoBehaviour, IAutoActionable
     {
         this.stopAction = false;
         this.actionInProgress = false;
-
+        this.healthBar.enabled = false;
         this.activeTime = 0f;
         if (this.actionCoroutine != null)
         {
@@ -115,11 +115,12 @@ public class CookStation : MonoBehaviour, IAutoActionable
     {
         this.activeTime += Time.deltaTime;
         this.Cookable.SetCookActionTimeConsumed(this.activeTime);
-        
-        if (this.activeTime >= (this.Cookable.CookTime + this.Cookable.StartAlertTimeBeforeBurn))
+
+        if (this.activeTime >= (this.Cookable.CookTime + this.Cookable.FromCookTimeToBurn))
         {
-            this.stopAction = true;
-        }        
+            this.stopAction = true;            
+            return;
+        }
 
         var percentage = (this.activeTime / this.Cookable.CookTime);
         this.bar.fillAmount = Mathf.Lerp(0, 1, percentage);
@@ -128,6 +129,7 @@ public class CookStation : MonoBehaviour, IAutoActionable
         {
             this.bar.color = Color.red;
             this.blinkCoroutine = StartCoroutine(this.BlinkCoroutine());
+            return;
         }        
     }
 
@@ -170,7 +172,7 @@ public class CookStation : MonoBehaviour, IAutoActionable
 
     private void ObjectMovedAway(object sender, EventArgs e)
     {
-        if (this.objectOverMe != sender)
+        if (sender == null || this.objectOverMe != sender)
         {
             return;
         }

@@ -20,17 +20,17 @@ namespace Assets.Scripts.Objects
 
         private void OnTriggerEnter(Collider other)
         {
-            var recipe = other.transform.parent?.transform.GetComponent<IGrabable>();
-            if (recipe != null)
+            var recipe = other.transform.GetComponent<IGrabable>();
+            if (recipe != null && !recipe.IsBeingGrabbed)
             {
                 this.Position(recipe);
-                this.ObjectOnPosition?.Invoke(other.transform.parent?.gameObject, EventArgs.Empty);
+                this.ObjectOnPosition?.Invoke(other.transform.gameObject, EventArgs.Empty);
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            this.ObjectMovedAway?.Invoke(other.transform.parent?.gameObject, EventArgs.Empty);
+            this.ObjectMovedAway?.Invoke(other.transform.gameObject, EventArgs.Empty);
         }
 
         #endregion
